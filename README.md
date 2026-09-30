@@ -58,3 +58,7 @@ If you have any questions, suggestions, or feedback, please feel free to reach o
 Visit our [website](https://www.intellixar.vercel.app) to learn more about our company and explore our products and services. 🌐
 
 Thank you for your interest in Intellixar! ✨🙌
+
+## Intellixar Blogs
+
+The public Blogs lives at `/journal`. See [the publishing guide](src/content/journal/README.md) for adding articles, configuring the production URL, running checks, and the content architecture. Included articles are labeled starter samples for replacement before launch.

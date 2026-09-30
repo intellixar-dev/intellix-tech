@@ -1,0 +1,24 @@
+{
+  "id": "journal-001",
+  "slug": "ideas-worth-building",
+  "title": "Ideas worth building. Questions worth keeping.",
+  "excerpt": "A starting point for Intellixar Blogs: a place for unfinished questions, practical discoveries, and the thinking behind what we build.",
+  "content": "## Every project begins with a question\n\nWhat would happen if we made this simpler? What can a small experiment teach us? Which part of this problem actually matters to the person on the other side of the screen?\n\nIntellixar Blogs offers a space for those questions—and for the work that follows them. It brings together technical explorations, product thinking, and notes from the process of turning an idea into something useful.\n\nNot every piece needs a grand conclusion. Sometimes a useful article is a small observation, a debugging trail, or a clear explanation of a decision that was harder than it looked.\n\n> The useful part of an experiment is not always the thing you ship. Sometimes it is the question you learn to ask next.\n\n## What belongs here\n\nThere is room for both the technical detail and the human context around it:\n\n- **Technical explorations:** how a system fits together, where it breaks, and what a smaller version might teach us.\n- **Product thinking:** the choices that shape an experience, from the first screen to the smallest interaction.\n- **Experiments:** ideas tested at a scale where changing direction is still easy.\n- **Lessons:** practical notes that another builder can pick up and use.\n\nThe thread connecting these topics is curiosity. Good work often starts with paying closer attention to something familiar.\n\n## Make the thinking visible\n\nA polished interface tells one part of a story. The decisions behind it tell another. Why this interaction? Why this constraint? Why spend time on a detail most people will never consciously notice?\n\nWriting creates room to examine those decisions. It gives an idea enough structure to be questioned, improved, and shared. It also preserves the context that otherwise disappears when a project moves on.\n\nA useful note can follow a simple shape:\n\n1. Describe the question in plain language.\n2. Show the smallest example that makes it concrete.\n3. Explain what the example reveals—and what it cannot tell us.\n4. Leave a next step for someone who wants to explore further.\n\n## A notebook, with the door open\n\nThis blog begins with one author, Cindy Kandie, and a straightforward purpose: making space to publish on Intellixar. The format can grow as the work grows.\n\nFor now, the invitation is simple. Follow a question. Build a small version. Write down what changed your mind.\n\n---\n\nExplore the [Intellixar Labs](/labs) for another view of the ideas taking shape in the studio.\n",
+  "coverImage": "/assets/images/journal/ideas.png",
+  "coverAlt": "An open orbital form traced in cyan and violet.",
+  "authorId": "cindy-kandie",
+  "category": "Studio notes",
+  "tags": [
+    "Building in public",
+    "Intellixar",
+    "Ideas"
+  ],
+  "publishedAt": "2026-09-30T08:00:00Z",
+  "updatedAt": null,
+  "readingTime": null,
+  "featured": true,
+  "status": "published",
+  "seoTitle": null,
+  "seoDescription": null,
+  "sample": true
+}

@@ -1,0 +1,24 @@
+{
+  "id": "journal-draft-example",
+  "slug": "draft-notebook",
+  "title": "A private working notebook",
+  "excerpt": "A draft example for the publishing workflow.",
+  "content": "## A work in progress\n\nThis draft must never appear in public page data.",
+  "coverImage": "/assets/images/journal/architecture.png",
+  "coverAlt": "Three connected layers of a content system.",
+  "authorId": "cindy-kandie",
+  "category": "Engineering",
+  "tags": [
+    "Architecture",
+    "Building in public",
+    "Content systems"
+  ],
+  "publishedAt": null,
+  "updatedAt": null,
+  "readingTime": null,
+  "featured": false,
+  "status": "draft",
+  "seoTitle": null,
+  "seoDescription": null,
+  "sample": true
+}

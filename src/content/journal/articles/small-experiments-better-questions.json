@@ -1,0 +1,24 @@
+{
+  "id": "journal-002",
+  "slug": "small-experiments-better-questions",
+  "title": "Small experiments, better questions",
+  "excerpt": "An experiment does not need to become a product to be useful. Start with a question, set a boundary, and make the result easy to learn from.",
+  "content": "## Start with the uncertainty\n\n“We should build a prototype” sounds like a plan. But a prototype is only useful when it helps answer a question. Before choosing a tool or sketching an interface, write down what you do not yet understand.\n\nFor example: *Can someone understand the result without an explanation?* That question suggests a very different experiment from *Can the system respond quickly enough?*\n\n## Give the experiment a boundary\n\nChoose one thing to learn and a small amount of work that could reveal it. The boundary is part of the design. It keeps an experiment from quietly turning into a full product before its assumptions have been tested.\n\n1. State the question.\n2. Describe an observable signal.\n3. Build the smallest experience that produces that signal.\n4. Record what happened, including surprises.\n\n> An experiment earns its keep when it changes the next decision.\n\n## Keep a decision log\n\nA short note is enough. Write down the assumption, the observation, and the next action. Keep observations separate from interpretations: “three people missed the control” is different from “the layout is confusing.”\n\nThat distinction makes the result easier to revisit. A future version of the team can understand the evidence without inheriting every conclusion.\n\n## Leave room to stop\n\nSometimes the best result is deciding not to continue. An experiment that exposes an unhelpful premise has still done useful work. Keep the lesson, preserve a small example if it helps, and carry the question into the next attempt.\n",
+  "coverImage": "/assets/images/journal/experiments.png",
+  "coverAlt": "A field of small experiments, with one illuminated possibility.",
+  "authorId": "cindy-kandie",
+  "category": "Product thinking",
+  "tags": [
+    "Experiments",
+    "Ideas",
+    "Product design"
+  ],
+  "publishedAt": "2026-09-29T08:00:00Z",
+  "updatedAt": null,
+  "readingTime": null,
+  "featured": false,
+  "status": "published",
+  "seoTitle": null,
+  "seoDescription": null,
+  "sample": true
+}

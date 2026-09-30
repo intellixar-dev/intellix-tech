@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import { useTheme } from '@/context/ThemeContext';
 
 const PROJECT_TYPES = ['AI Product', 'Startup MVP', 'Web Application', 'Mobile App', 'Creative Technology', 'Other'];
@@ -9,7 +10,7 @@ const EMPTY = { name: '', email: '', company: '', projectType: '', budget: '', t
 
 export default function ConsultationModal({ isOpen, onClose }) {
   const [form, setForm] = useState(EMPTY);
-  const [submitted, setSubmitted] = useState(false);
+  const [state, handleSubmit, reset] = useForm('mppwnoaq');
   const { isDark } = useTheme();
 
   useEffect(() => {
@@ -17,7 +18,6 @@ export default function ConsultationModal({ isOpen, onClose }) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      setSubmitted(false);
       setForm(EMPTY);
     }
     return () => { document.body.style.overflow = ''; };
@@ -27,13 +27,14 @@ export default function ConsultationModal({ isOpen, onClose }) {
 
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+  const closeModal = () => {
+    reset();
+    setForm(EMPTY);
+    onClose();
   };
 
   return (
-    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && closeModal()}>
       <div
         className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
         style={{
@@ -44,7 +45,7 @@ export default function ConsultationModal({ isOpen, onClose }) {
       >
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={closeModal}
           className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all z-10"
           aria-label="Close"
         >
@@ -52,8 +53,8 @@ export default function ConsultationModal({ isOpen, onClose }) {
         </button>
 
         <div className="p-8 md:p-10">
-          {submitted ? (
-            <div className="text-center py-12">
+          {state.succeeded ? (
+            <div role="status" className="text-center py-12">
               <div
                 className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 glow-pulse"
                 style={{ background: 'rgba(34,211,238,0.12)', border: '1px solid rgba(34,211,238,0.3)' }}
@@ -70,7 +71,7 @@ export default function ConsultationModal({ isOpen, onClose }) {
                 Your inquiry has been received. Expect a response within 24–48 hours.
               </p>
               <button
-                onClick={onClose}
+                onClick={closeModal}
                 className="mt-8 px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, #22d3ee, #7c3aed)',
@@ -102,13 +103,15 @@ export default function ConsultationModal({ isOpen, onClose }) {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form action="https://formspree.io/f/mppwnoaq" method="POST" onSubmit={handleSubmit} className="space-y-5">
+                <input type="hidden" name="source" value="Consultation Modal" />
                 {/* Name + Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="ix-label">Name *</label>
                     <input
                       required
+                      name="name"
                       className="ix-input"
                       placeholder="Your name"
                       value={form.name}
@@ -120,11 +123,13 @@ export default function ConsultationModal({ isOpen, onClose }) {
                     <input
                       required
                       type="email"
+                      name="email"
                       className="ix-input"
                       placeholder="you@company.com"
                       value={form.email}
                       onChange={set('email')}
                     />
+                    <ValidationError field="email" prefix="Email" errors={state.errors} className="text-red-400 text-xs mt-2" />
                   </div>
                 </div>
 
@@ -132,6 +137,7 @@ export default function ConsultationModal({ isOpen, onClose }) {
                 <div>
                   <label className="ix-label">Company / Startup</label>
                   <input
+                    name="company"
                     className="ix-input"
                     placeholder="Optional"
                     value={form.company}
@@ -143,14 +149,15 @@ export default function ConsultationModal({ isOpen, onClose }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="ix-label">Project Type *</label>
-                    <select required className="ix-input" value={form.projectType} onChange={set('projectType')}>
+                    <select required name="projectType" className="ix-input" value={form.projectType} onChange={set('projectType')}>
                       <option value="" disabled>Select type</option>
                       {PROJECT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
+                    <ValidationError field="projectType" prefix="Project type" errors={state.errors} className="text-red-400 text-xs mt-2" />
                   </div>
                   <div>
                     <label className="ix-label">Budget Range</label>
-                    <select className="ix-input" value={form.budget} onChange={set('budget')}>
+                    <select name="budget" className="ix-input" value={form.budget} onChange={set('budget')}>
                       <option value="" disabled>Select range</option>
                       {BUDGETS.map((b) => <option key={b} value={b}>{b}</option>)}
                     </select>
@@ -160,7 +167,7 @@ export default function ConsultationModal({ isOpen, onClose }) {
                 {/* Timeline */}
                 <div>
                   <label className="ix-label">Timeline</label>
-                  <select className="ix-input" value={form.timeline} onChange={set('timeline')}>
+                  <select name="timeline" className="ix-input" value={form.timeline} onChange={set('timeline')}>
                     <option value="" disabled>When do you need this?</option>
                     {TIMELINES.map((t) => <option key={t} value={t}>{t}</option>)}
                   </select>
@@ -172,22 +179,26 @@ export default function ConsultationModal({ isOpen, onClose }) {
                   <textarea
                     required
                     rows={4}
+                    name="message"
                     className="ix-input resize-none"
                     placeholder="Describe your project, goals, and any specific requirements..."
                     value={form.description}
                     onChange={set('description')}
                   />
+                  <ValidationError field="message" prefix="Project description" errors={state.errors} className="text-red-400 text-xs mt-2" />
                 </div>
 
+                <ValidationError errors={state.errors} role="alert" className="text-red-400 text-sm" />
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl font-bold text-black text-base transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  disabled={state.submitting}
+                  className="w-full py-3.5 rounded-xl font-bold text-black text-base transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait"
                   style={{
                     background: 'linear-gradient(135deg, #22d3ee, #7c3aed)',
                     boxShadow: '0 0 32px rgba(34,211,238,0.25)',
                   }}
                 >
-                  Send Inquiry
+                  {state.submitting ? 'Sending...' : 'Send Inquiry'}
                 </button>
 
                 <p className="text-center text-gray-600 text-xs">

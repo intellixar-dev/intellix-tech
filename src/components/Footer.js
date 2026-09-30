@@ -2,20 +2,21 @@ import React from 'react';
 import Link from 'next/link';
 
 const PRODUCTS = [
+  { label: 'Intellixar Products', href: '/projects/intellixar' },
+  { label: 'Client Products', href: '/projects/clients' },
   { label: 'AI Radar', href: '/ai-radar' },
-  { label: 'MemeGod Creator', href: 'https://meme-god.netlify.app/', external: true },
-  { label: 'Project Catalyst', href: '#' },
+  { label: 'Kilimo Power', href: 'https://kilimopower.co.ke', external: true },
 ];
 
 const COMPANY = [
+  { label: 'Blogs', href: '/journal' },
   { label: 'About', href: '#about' },
-  { label: 'Labs', href: '#labs' },
-  { label: 'Selected Work', href: '#work' },
-  { label: 'Currently Building', href: '#building' },
+  //{ label: 'Labs', href: '#labs' },
+  { label: 'Selected Work', href: '/portfolio' }
 ];
 
 const CONNECT = [
-  { label: 'Work With Us', href: '#work-with-us' },
+  { label: 'Work With Us', href: '/work-with-us' },
   { label: 'Email', href: 'mailto:intellixar.tech@gmail.com' },
 ];
 

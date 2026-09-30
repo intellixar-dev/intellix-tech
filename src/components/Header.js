@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ToggleButton from './ThemeBtn';
+import { productCategories } from './products/categories';
+import styles from './Header.module.css';
 
 const NAV_LINKS = [
   { label: 'Products', href: '/projects' },
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Labs', href: '/labs' },
+  { label: 'Blogs', href: '/journal' },
+  //{ label: 'Labs', href: '/labs' },
   { label: 'Work With Us', href: '/work-with-us' },
 ];
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const productsRef = useRef(null);
+  const productsToggleRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,11 +29,22 @@ const Header = () => {
 
   useEffect(() => {
     setMenuOpen(false);
-  }, [router.pathname]);
+    setProductsOpen(false);
+  }, [router.asPath]);
+
+  useEffect(() => {
+    if (!productsOpen) return;
+    const closeOutside = (event) => {
+      if (!productsRef.current?.contains(event.target)) setProductsOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, [productsOpen]);
 
   const isActive = (href) => {
     if (href.startsWith('#')) return false;
-    return router.pathname === href;
+    if (href === '/projects' && router.pathname === '/ai-radar') return true;
+    return router.pathname === href || router.pathname.startsWith(`${href}/`);
   };
 
   return (
@@ -57,8 +74,27 @@ const Header = () => {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
+          {NAV_LINKS.map((link) => link.href === '/projects' ? (
+            <div key={link.label} className={styles.products} ref={productsRef}
+              onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setProductsOpen(false); }}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape' && productsOpen) {
+                  setProductsOpen(false);
+                  productsToggleRef.current?.focus();
+                }
+              }}>
+              <Link href={link.href} className={styles.parentLink} style={{ color: isActive(link.href) ? 'var(--label-cyan)' : 'var(--text-secondary)' }}>{link.label}</Link>
+              <button ref={productsToggleRef} className={styles.toggle} aria-label="Product categories" aria-expanded={productsOpen} aria-controls="desktop-product-categories" onClick={() => setProductsOpen(!productsOpen)}>
+                <span aria-hidden="true">{productsOpen ? '−' : '⌄'}</span>
+              </button>
+              {productsOpen && <div id="desktop-product-categories" className={styles.dropdown}>
+                {Object.values(productCategories).map((category) => <Link key={category.href} href={category.href} aria-current={isActive(category.href) ? 'page' : undefined}>
+                  <span>{category.label}</span><small>{category.heading}</small>
+                </Link>)}
+              </div>}
+            </div>
+          ) : (
             <Link
               key={link.label}
               href={link.href}
@@ -82,9 +118,11 @@ const Header = () => {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden flex flex-col gap-1.5 p-2 rounded-lg transition-colors hover:bg-white/5"
+            className="lg:hidden flex flex-col gap-1.5 p-2 rounded-lg transition-colors hover:bg-white/5"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             <span className={`block w-5 h-0.5 transition-all duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}
               style={{ background: 'var(--text-secondary)' }} />
@@ -99,7 +137,8 @@ const Header = () => {
       {/* Mobile menu */}
       {menuOpen && (
         <div
-          className="md:hidden border-t px-5 py-4 flex flex-col gap-1"
+          id="mobile-navigation"
+          className="lg:hidden border-t px-5 py-4 flex flex-col gap-1"
           style={{
             borderColor: 'var(--border-card)',
             background: 'var(--nav-bg)',
@@ -107,6 +146,7 @@ const Header = () => {
           }}
         >
           {NAV_LINKS.map((link) => (
+            <React.Fragment key={link.label}>
             <Link
               key={link.label}
               href={link.href}
@@ -118,6 +158,10 @@ const Header = () => {
             >
               {link.label}
             </Link>
+            {link.href === '/projects' && <div className={styles.mobileCategories}>
+              {Object.values(productCategories).map((category) => <Link key={category.href} href={category.href} aria-current={isActive(category.href) ? 'page' : undefined}>{category.label}</Link>)}
+            </div>}
+            </React.Fragment>
           ))}
         </div>
       )}
