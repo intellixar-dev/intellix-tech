@@ -1,0 +1,12 @@
+.products { position: relative; display: flex; align-items: center; }
+.parentLink { padding: 8px 4px 8px 16px; font-size: 14px; font-weight: 500; }
+.toggle { width: 36px; height: 40px; color: var(--text-secondary); border-radius: 8px; }
+.toggle:hover, .parentLink:hover { color: var(--text-primary); }
+.dropdown { position: absolute; top: calc(100% + 8px); left: 0; width: 284px; padding: 8px; border: 1px solid var(--border-card); border-radius: 16px; background: var(--bg-deep); box-shadow: 0 16px 40px rgba(0, 0, 0, .15); }
+.dropdown a { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 10px; color: var(--text-primary); font-size: 14px; }
+.dropdown small { font-size: 12px; color: var(--text-secondary); }
+.dropdown a:hover { background: var(--bg-elevated); }
+.dropdown a[aria-current='page'], .mobileCategories a[aria-current='page'] { color: var(--label-cyan); }
+.mobileCategories { display: flex; flex-direction: column; margin: 0 12px 8px 24px; border-left: 1px solid var(--border-card); }
+.mobileCategories a { font-size: 13px; color: var(--text-secondary); padding: 12px 16px; }
+.products a:focus-visible, .toggle:focus-visible, .mobileCategories a:focus-visible { outline: 2px solid var(--label-cyan); outline-offset: 2px; border-radius: 8px; }

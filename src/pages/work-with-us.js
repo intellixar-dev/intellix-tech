@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import Layout from '@/components/Layout';
 import { useTheme } from '@/context/ThemeContext';
 import { useInView } from '@/hooks/useInView';
@@ -266,16 +267,16 @@ const ServicesSection = () => (
 
 const ContactFormSection = () => {
   const [form, setForm] = useState(EMPTY_FORM);
-  const [submitted, setSubmitted] = useState(false);
+  const [state, handleSubmit, reset] = useForm('mppwnoaq');
   const { isDark } = useTheme();
 
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    window.scrollTo({ top: document.getElementById('contact-form').offsetTop - 80, behavior: 'smooth' });
-  };
+  useEffect(() => {
+    if (state.succeeded) {
+      window.scrollTo({ top: document.getElementById('contact-form').offsetTop - 80, behavior: 'smooth' });
+    }
+  }, [state.succeeded]);
 
   return (
     <section
@@ -306,9 +307,10 @@ const ContactFormSection = () => {
           </div>
         </Reveal>
 
-        {submitted ? (
+        {state.succeeded ? (
           <Reveal>
             <div
+              role="status"
               className="rounded-2xl p-12 text-center"
               style={{
                 background: 'var(--bg-card)',
@@ -340,7 +342,7 @@ const ContactFormSection = () => {
               <button
                 className="mt-8 px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
                 style={{ background: 'linear-gradient(135deg,#22d3ee,#7c3aed)', color: '#000' }}
-                onClick={() => { setSubmitted(false); setForm(EMPTY_FORM); }}
+                onClick={() => { reset(); setForm(EMPTY_FORM); }}
               >
                 Submit Another Inquiry
               </button>
@@ -368,37 +370,40 @@ const ContactFormSection = () => {
                 </span>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form action="https://formspree.io/f/mppwnoaq" method="POST" onSubmit={handleSubmit} className="space-y-5">
+                <input type="hidden" name="source" value="Work With Us" />
                 {/* Name + Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="ix-label">Name *</label>
-                    <input required className="ix-input" placeholder="Your name" value={form.name} onChange={set('name')} />
+                    <input required name="name" className="ix-input" placeholder="Your name" value={form.name} onChange={set('name')} />
                   </div>
                   <div>
                     <label className="ix-label">Email *</label>
-                    <input required type="email" className="ix-input" placeholder="you@company.com" value={form.email} onChange={set('email')} />
+                    <input required type="email" name="email" className="ix-input" placeholder="you@company.com" value={form.email} onChange={set('email')} />
+                    <ValidationError field="email" prefix="Email" errors={state.errors} className="text-red-400 text-xs mt-2" />
                   </div>
                 </div>
 
                 {/* Company */}
                 <div>
                   <label className="ix-label">Company / Startup</label>
-                  <input className="ix-input" placeholder="Optional" value={form.company} onChange={set('company')} />
+                  <input name="company" className="ix-input" placeholder="Optional" value={form.company} onChange={set('company')} />
                 </div>
 
                 {/* Project Type + Budget */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="ix-label">Project Type *</label>
-                    <select required className="ix-input" value={form.projectType} onChange={set('projectType')}>
+                    <select required name="projectType" className="ix-input" value={form.projectType} onChange={set('projectType')}>
                       <option value="" disabled>Select type</option>
                       {PROJECT_TYPES.map((t) => <option key={t}>{t}</option>)}
                     </select>
+                    <ValidationError field="projectType" prefix="Project type" errors={state.errors} className="text-red-400 text-xs mt-2" />
                   </div>
                   <div>
                     <label className="ix-label">Budget Range</label>
-                    <select className="ix-input" value={form.budget} onChange={set('budget')}>
+                    <select name="budget" className="ix-input" value={form.budget} onChange={set('budget')}>
                       <option value="" disabled>Select range</option>
                       {BUDGETS.map((b) => <option key={b}>{b}</option>)}
                     </select>
@@ -408,7 +413,7 @@ const ContactFormSection = () => {
                 {/* Timeline */}
                 <div>
                   <label className="ix-label">Timeline</label>
-                  <select className="ix-input" value={form.timeline} onChange={set('timeline')}>
+                  <select name="timeline" className="ix-input" value={form.timeline} onChange={set('timeline')}>
                     <option value="" disabled>When do you need this?</option>
                     {TIMELINES.map((t) => <option key={t}>{t}</option>)}
                   </select>
@@ -418,18 +423,21 @@ const ContactFormSection = () => {
                 <div>
                   <label className="ix-label">Project Description *</label>
                   <textarea
-                    required rows={5} className="ix-input resize-none"
+                    required rows={5} name="message" className="ix-input resize-none"
                     placeholder="Describe your project, goals, and any specific requirements or constraints..."
                     value={form.description} onChange={set('description')}
                   />
+                  <ValidationError field="message" prefix="Project description" errors={state.errors} className="text-red-400 text-xs mt-2" />
                 </div>
 
+                <ValidationError errors={state.errors} role="alert" className="text-red-400 text-sm" />
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl font-black text-black text-base transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  disabled={state.submitting}
+                  className="w-full py-4 rounded-xl font-black text-black text-base transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait"
                   style={{ background: 'linear-gradient(135deg,#22d3ee,#7c3aed)', boxShadow: '0 0 40px rgba(34,211,238,0.2)' }}
                 >
-                  Send Inquiry
+                  {state.submitting ? 'Sending...' : 'Send Inquiry'}
                 </button>
 
                 <p className="text-center text-xs pt-1" style={{ color: 'var(--text-muted)' }}>

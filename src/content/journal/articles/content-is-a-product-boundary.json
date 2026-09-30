@@ -1,0 +1,24 @@
+{
+  "id": "journal-003",
+  "slug": "content-is-a-product-boundary",
+  "title": "A content model is a product decision",
+  "excerpt": "Separate the writing from the interface, and the first version of a publication can stay simple without closing off the next one.",
+  "content": "## Begin with the relationship\n\nAn article has an author. That sounds obvious, but the way we represent that relationship determines how much work the next version will need.\n\nIf a name and biography are copied into every article, updating an author means editing many records. A stable reference, such as `authorId`, makes that relationship explicit.\n\n```ts\ntype ArticleSource = {\n  id: string;\n  slug: string;\n  authorId: string;\n  status: 'draft' | 'published';\n  content: string;\n};\n```\n\nThe storage can still be local files. A useful model does not require a database.\n\n## Put the public boundary in one place\n\nA listing page, a related-articles section, and a direct article route all need the same answer to a basic question: *is this content public?*\n\nApply that rule before content reaches the page. A shared content repository gives every public view the same collection to work with.\n\n```ts\nconst publicArticles = articles.filter(\n  (article) => article.status === 'published'\n);\n```\n\nThis example shows the status rule only. A real publication may also exclude future publication dates and validate the author reference before generating a page.\n\n## Keep the interface focused\n\nA card needs a title, an excerpt, a cover, and enough context to help someone choose what to read. It does not need the full body of every article in its page data.\n\n- Fetch complete content for the reading page.\n- Pass summaries to discovery views.\n- Keep storage access out of reusable components.\n- Validate metadata close to the content source.\n\n![Three connected layers representing content, queries, and presentation.](/assets/images/journal/architecture.png \"Local content → shared queries → public views\")\n\n## Design for the next change you can name\n\nSeparating authors from articles is useful now and later. Introducing an entire permissions system before there are accounts is a different kind of work.\n\nThe aim is a clear boundary: today, files supply the content; later, another source can supply the same shape. The public interface should not need to know how the writing was stored.\n\n---\n\nA small model with explicit relationships often leaves more room to grow than a large model full of speculative features.\n",
+  "coverImage": "/assets/images/journal/architecture.png",
+  "coverAlt": "Three connected layers of a content system.",
+  "authorId": "cindy-kandie",
+  "category": "Engineering",
+  "tags": [
+    "Architecture",
+    "Building in public",
+    "Content systems"
+  ],
+  "publishedAt": "2026-09-28T08:00:00Z",
+  "updatedAt": null,
+  "readingTime": null,
+  "featured": false,
+  "status": "published",
+  "seoTitle": null,
+  "seoDescription": null,
+  "sample": true
+}

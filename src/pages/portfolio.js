@@ -6,21 +6,6 @@ import { useInView } from '@/hooks/useInView';
 
 const PROJECTS = [
   {
-    id: '2ride',
-    title: '2Ride',
-    category: 'Biking & Adventure',
-    tagline: 'Ride together. Explore everywhere.',
-    description:
-      'A community-driven biking platform and experience that brings riders together through organized rides, events, and adventure culture — while making discovery, booking, and ride coordination seamless.',
-    challenge: 'Biking communities lacked a unified platform to discover rides, coordinate events, and connect with fellow riders in a meaningful way.',
-    outcome: 'Built a thriving rider community platform with seamless event booking, ride discovery, and coordination tools at its core.',
-    stack: ['React Native', 'Node.js', 'Google Maps API', 'Firebase', 'M-Pesa'],
-    accent: '#f59e0b',
-    icon: '🛵',
-    services: ['Community Platform', 'Event Booking', 'Mobile App'],
-    href: 'https://2ride-ui.vercel.app',
-  },
-  {
     id: 'kilimo-power',
     title: 'Kilimo Power',
     category: 'Farm Power & Machinery',
@@ -33,22 +18,7 @@ const PROJECTS = [
     accent: '#34d399',
     icon: '🌱',
     services: ['E-commerce Platform', 'WhatsApp Integration', 'Product Catalogue'],
-    href: 'https://kilimopower.vercel.app',
-  },
-  {
-    id: 'overall-interiors',
-    title: 'Overall Interiors',
-    category: 'Interior Design & Home',
-    tagline: 'Beautiful spaces, perfectly matched.',
-    description:
-      'Premium interior design studio platform connecting homeowners and commercial clients with top Kenyan interior designers. Features a curated portfolio showcase, virtual consultation booking, and end-to-end project management tools.',
-    challenge: 'Interior designers had no unified digital presence, and clients struggled to find and evaluate vetted design professionals.',
-    outcome: 'Platform launched with 20+ verified designers. Client-to-consultation conversion rate at 68% within the first month.',
-    stack: ['React', 'Prisma', 'PostgreSQL', 'Cloudinary', 'Stripe'],
-    accent: '#f472b6',
-    icon: '🏠',
-    services: ['Web Platform', 'Design System', 'Booking & Payments'],
-    href: 'https://interiorz-sigma.vercel.app',
+    href: 'https://kilimopower.co.ke',
   },
 ];
 
@@ -145,7 +115,7 @@ export default function Portfolio() {
         {/* Projects */}
         <section className="px-6 py-20" style={{ background: 'var(--bg-mid)' }}>
           <div className="max-w-5xl mx-auto space-y-12">
-            {PROJECTS.map((project, idx) => (
+            {PROJECTS.map((project) => (
               <Reveal key={project.id} delay={0}>
                 <article
                   className="glass-card rounded-2xl overflow-hidden"

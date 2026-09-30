@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { products as PRODUCTS } from '@/data/products';
+import CategoryCards from '@/components/products/CategoryCards';
+import ProductCard from '@/components/products/ProductCard';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import ConsultationModal from '@/components/ConsultationModal';
@@ -7,78 +10,7 @@ import { useInView } from '@/hooks/useInView';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
-const PRODUCTS = [
-  {
-    id: 'ai-radar',
-    category: 'AI Tool',
-    status: 'Beta',
-    statusColor: '#22d3ee',
-    title: 'AI Radar',
-    mission: 'Helping people identify AI-generated and manipulated content.',
-    description: 'A digital trust tool that analyzes text, images, and screenshots for AI generation fingerprints and credibility signals.',
-    features: ['AI Content Detection', 'Image Analysis', 'Trust Scoring', 'Risk Signal Surfacing'],
-    href: '/ai-radar',
-    isInternal: true,
-    featured: true,
-    accent: '#22d3ee',
-  },
-  {
-    id: '2ride',
-    category: 'Mobility Tech',
-    status: 'Beta',
-    statusColor: '#f59e0b',
-    title: '2Ride',
-    mission: 'A community-driven biking platform built around adventure, culture, and connection.',
-    description: 'Brings riders together through organized rides, events, and adventure culture — while making discovery, booking, and ride coordination seamless.',
-    features: ['Organized Rides & Events', 'Ride Discovery', 'Booking & Coordination', 'Rider Community'],
-    href: 'https://2ride-ui.vercel.app',
-    isInternal: false,
-    featured: false,
-    accent: '#f59e0b',
-  },
-  {
-    id: 'kilimo-power',
-    category: 'AgriTech',
-    status: 'In Development',
-    statusColor: '#34d399',
-    title: 'Kilimo Power',
-    mission: "Kenya's most trusted farm power brand — solar pumps, backup systems & farm machinery.",
-    description: 'Power your farm, cut costs, harvest more. Solar pumps, backup systems & farm machinery delivered anywhere in Kenya.',
-    features: ['Solar Pump Systems', 'Backup Power', 'Farm Machinery', 'WhatsApp Orders'],
-    href: 'https://kilimopower.vercel.app',
-    isInternal: false,
-    featured: false,
-    accent: '#34d399',
-  },
-  {
-    id: 'overall-interiors',
-    category: 'Design Tech',
-    status: 'Live',
-    statusColor: '#f472b6',
-    title: 'Overall Interiors',
-    mission: 'Connecting clients with top Kenyan interior designers for beautiful transformations.',
-    description: 'Premium interior design studio platform with a curated portfolio, virtual consultations, and end-to-end project management.',
-    features: ['Design Portfolio', 'Client Matching', 'Virtual Consultations', 'Project Tracking'],
-    href: 'https://interiorz-sigma.vercel.app',
-    isInternal: false,
-    featured: false,
-    accent: '#f472b6',
-  },
-  {
-    id: 'memegod',
-    category: 'Creative Tool',
-    status: 'Live',
-    statusColor: '#4ade80',
-    title: 'MemeGod Creator',
-    mission: 'Create hilarious meme content — fast, free, and endlessly creative.',
-    description: 'Easy-to-use meme creation with custom text overlays, dark/light themes, and instant download.',
-    features: ['Custom Text Overlays', 'Dark/Light Themes', 'Instant Download'],
-    href: 'https://meme-god.netlify.app/',
-    isInternal: false,
-    featured: false,
-    accent: '#a855f7',
-  },
-];
+
 
 const BUILDING_ITEMS = [
   {
@@ -92,7 +24,7 @@ const BUILDING_ITEMS = [
     icon: '🌱',
     title: 'Kilimo Power',
     status: 'In Development',
-    desc: 'Agricultural intelligence platform with real-time weather, crop advisory, and market price feeds for Kenyan farmers.',
+    desc: PRODUCTS.find((product) => product.id === 'kilimo-power').description,
     color: '#34d399',
   },
 ];
@@ -286,8 +218,9 @@ const AboutSection = () => (
 );
 
 const ProductsSection = () => {
-  const featured = PRODUCTS.find((p) => p.featured);
+  const featured = PRODUCTS.find((p) => p.type === 'intellixar' && p.featured);
   const others = PRODUCTS.filter((p) => !p.featured);
+  const clientProducts = others.filter((product) => product.type === 'client');
 
   return (
     <section id="products" className="px-6 py-24" style={{ background: 'var(--bg-mid)' }}>
@@ -299,10 +232,16 @@ const ProductsSection = () => {
               className="text-4xl md:text-5xl font-black"
               style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-primary)' }}
             >
-              Our Product Ecosystem
+              Products built with intention.
             </h2>
           </div>
         </Reveal>
+
+        <div className="mb-12"><CategoryCards /></div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Intellixar Products</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>Products we build, own, and evolve at Intellixar.</p>
+        </div>
 
         {/* Featured */}
         <Reveal>
@@ -316,7 +255,7 @@ const ProductsSection = () => {
             >
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-3 mb-5">
-                  <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{featured.category}</span>
+                  <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Intellixar Product</span>
                   <StatusBadge label={featured.status} color={featured.statusColor} />
                   <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: 'rgba(34,211,238,0.1)', color: '#22d3ee' }}>Flagship</span>
                 </div>
@@ -341,7 +280,7 @@ const ProductsSection = () => {
                       View Product
                     </button>
                   </Link>
-                  <Link href={featured.href}>
+                  <Link href="/ai-radar#waitlist">
                     <button className="px-6 py-2.5 rounded-full font-semibold text-sm transition-all"
                       style={{ color: featured.accent, border: `1px solid ${featured.accent}40` }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = `${featured.accent}10`; }}
@@ -356,51 +295,18 @@ const ProductsSection = () => {
           </div>
         </Reveal>
 
-        {/* Other products */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {others.map((product, i) => (
-            <Reveal key={product.id} delay={i * 80}>
-              <div
-                className="glass-card rounded-2xl p-6 flex flex-col h-full"
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${product.accent}30`; e.currentTarget.style.boxShadow = `0 0 24px ${product.accent}08`; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-card)'; e.currentTarget.style.boxShadow = 'none'; }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{product.category}</span>
-                  <StatusBadge label={product.status} color={product.statusColor} />
-                </div>
-                <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-primary)' }}>{product.title}</h3>
-                <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: 'var(--text-secondary)' }}>{product.description}</p>
-                <ul className="flex flex-wrap gap-1.5 mb-5">
-                  {product.features.slice(0, 3).map((f) => (
-                    <li key={f} className="text-xs px-2.5 py-1 rounded-full"
-                      style={{ background: `${product.accent}10`, color: product.accent, border: `1px solid ${product.accent}28` }}>{f}</li>
-                  ))}
-                </ul>
-                {product.href !== '#' ? (
-                  product.isInternal ? (
-                    <Link href={product.href}>
-                      <button className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-85"
-                        style={{ background: `${product.accent}12`, color: product.accent, border: `1px solid ${product.accent}28` }}>
-                        View Product
-                      </button>
-                    </Link>
-                  ) : (
-                    <a href={product.href} target="_blank" rel="noreferrer">
-                      <button className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all hover:opacity-85"
-                        style={{ background: `${product.accent}12`, color: product.accent, border: `1px solid ${product.accent}28` }}>
-                        Try Now
-                      </button>
-                    </a>
-                  )
-                ) : (
-                  <button className="w-full py-2.5 rounded-xl font-semibold text-sm" disabled
-                    style={{ background: 'var(--bg-card)', color: 'var(--text-muted)', border: '1px solid var(--border-card)', cursor: 'not-allowed' }}>
-                    Coming Soon
-                  </button>
-                )}
-              </div>
-            </Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {others.filter((product) => product.type === 'intellixar').map((product) => (
+            <ProductCard key={product.id} product={product} compact />
+          ))}
+        </div>
+        <div className="mt-14 mb-6">
+          <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Client Products</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>Digital products we build in partnership with ambitious businesses, founders, and organizations.</p>
+        </div>
+        <div className={`grid gap-6 ${clientProducts.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+          {clientProducts.map((product) => (
+            <ProductCard key={product.id} product={product} compact wide={clientProducts.length === 1} />
           ))}
         </div>
       </div>
@@ -466,8 +372,8 @@ const AIRadarSpotlight = () => {
                 <span style={{ color: '#22d3ee' }}>more informed decisions online.</span>&rdquo;
               </p>
               <div className="flex gap-4 flex-wrap justify-center">
-                <Link href="/ai-radar">
-                  <button className="px-8 py-3 rounded-full font-bold text-black text-sm transition-all hover:scale-105"
+                  <Link href="/ai-radar#waitlist">
+                    <button className="px-8 py-3 rounded-full font-bold text-black text-sm transition-all hover:scale-105"
                     style={{ background: '#22d3ee', boxShadow: '0 0 28px rgba(34,211,238,0.4)' }}>
                     Join Waitlist
                   </button>
@@ -535,8 +441,10 @@ const CurrentlyBuildingSection = () => (
   </section>
 );
 
-const PortfolioTeaser = () => (
-  <section id="portfolio-teaser" className="px-6 py-24" style={{ background: 'var(--bg-mid)' }}>
+const PortfolioTeaser = () => {
+  const clientProducts = PRODUCTS.filter((product) => product.type === 'client');
+
+  return <section id="portfolio-teaser" className="px-6 py-24" style={{ background: 'var(--bg-mid)' }}>
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
         <Reveal>
@@ -560,34 +468,16 @@ const PortfolioTeaser = () => (
         </Reveal>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        {[
-          { title: '2Ride', category: 'Biking & Adventure', desc: 'Community-driven biking platform bringing riders together through organized rides, events, and adventure culture.', color: '#f59e0b', icon: '🛵' },
-          { title: 'Kilimo Power', category: 'Farm Power', desc: "Kenya's most trusted farm power brand — solar pumps, backup systems & farm machinery delivered anywhere in Kenya.", color: '#34d399', icon: '🌱' },
-          { title: 'Overall Interiors', category: 'Design Tech', desc: 'Premium interior design platform connecting clients with top Kenyan designers.', color: '#f472b6', icon: '🏠' },
-        ].map((p, i) => (
-          <Reveal key={p.title} delay={i * 100}>
-            <div
-              className="glass-card rounded-2xl p-6"
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${p.color}30`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-card)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-            >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                style={{ background: `${p.color}12`, border: `1px solid ${p.color}25` }}
-              >
-                {p.icon}
-              </div>
-              <span className="text-xs font-semibold uppercase tracking-widest block mb-2" style={{ color: 'var(--text-muted)' }}>{p.category}</span>
-              <h3 className="font-bold text-lg mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-primary)' }}>{p.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{p.desc}</p>
-            </div>
+      <div className={`grid gap-5 ${clientProducts.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-3'}`}>
+        {clientProducts.map((product, i) => (
+          <Reveal key={product.id} delay={i * 100}>
+            <ProductCard product={product} compact wide={clientProducts.length === 1} />
           </Reveal>
         ))}
       </div>
     </div>
   </section>
-);
+};
 
 const WorkWithUsSection = ({ onOpenModal }) => {
   const { isDark } = useTheme();

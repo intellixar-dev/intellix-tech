@@ -1,4 +1,5 @@
 import React from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import Layout from '@/components/Layout';
 
 const features = [
@@ -103,6 +104,47 @@ const RadarVisual = () => (
   </div>
 );
 
+const WaitlistForm = () => {
+  const [state, handleSubmit] = useForm('mppwnoaq');
+
+  if (state.succeeded) {
+    return <p role="status" className="text-cyan-300 font-semibold">You&apos;re on the AI Radar waitlist. Thanks for joining!</p>;
+  }
+
+  return (
+    <form
+      action="https://formspree.io/f/mppwnoaq"
+      method="POST"
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto text-left"
+      aria-label="AI Radar waitlist"
+    >
+      <label htmlFor="waitlist-email" className="block text-sm font-semibold text-white mb-2">
+        Email address
+      </label>
+      <input
+        id="waitlist-email"
+        type="email"
+        name="email"
+        autoComplete="email"
+        placeholder="you@example.com"
+        required
+        className="w-full rounded-xl px-4 py-3 text-white bg-white/5 border border-white/20 focus:outline-none focus:border-cyan-400"
+      />
+      <ValidationError field="email" prefix="Email" errors={state.errors} className="text-red-300 text-sm mt-2" />
+      <ValidationError errors={state.errors} className="text-red-300 text-sm mt-2" />
+      <button
+        type="submit"
+        disabled={state.submitting}
+        className="w-full mt-4 px-10 py-4 rounded-full font-bold text-black text-lg transition-all duration-200 hover:scale-105 disabled:opacity-60 disabled:cursor-wait"
+        style={{ background: '#22d3ee', boxShadow: '0 0 36px rgba(34,211,238,0.45)' }}
+      >
+        {state.submitting ? 'Joining...' : 'Join Waitlist'}
+      </button>
+    </form>
+  );
+};
+
 export default function AiRadar() {
   return (
     <Layout>
@@ -138,7 +180,7 @@ export default function AiRadar() {
               className="w-1.5 h-1.5 rounded-full bg-cyan-400 glow-pulse"
               style={{ display: 'inline-block' }}
             />
-            Powered by IntelliXar
+            Intellixar Product · Powered by IntelliXar
           </div>
 
           <h1
@@ -168,7 +210,8 @@ export default function AiRadar() {
           </p>
 
           <div className="flex gap-4 flex-wrap justify-center">
-            <button
+            <a
+              href="#waitlist"
               className="px-8 py-3 rounded-full font-bold text-black text-base transition-all duration-200 hover:scale-105"
               style={{
                 background: '#22d3ee',
@@ -176,8 +219,9 @@ export default function AiRadar() {
               }}
             >
               Join Waitlist
-            </button>
-            <button
+            </a>
+            <a
+              href="#features"
               className="px-8 py-3 rounded-full font-semibold text-base transition-all duration-200 hover:bg-cyan-500/10"
               style={{
                 color: '#22d3ee',
@@ -185,7 +229,7 @@ export default function AiRadar() {
               }}
             >
               Learn More
-            </button>
+            </a>
           </div>
         </section>
 
@@ -222,7 +266,7 @@ export default function AiRadar() {
         </section>
 
         {/* ── Features ───────────────────────────────────────── */}
-        <section className="px-6 py-16 max-w-6xl mx-auto">
+        <section id="features" className="px-6 py-16 max-w-6xl mx-auto scroll-mt-24">
           <div className="text-center mb-12">
             <p
               className="text-xs font-bold tracking-widest uppercase mb-3"
@@ -327,7 +371,7 @@ export default function AiRadar() {
         </section>
 
         {/* ── CTA ────────────────────────────────────────────── */}
-        <section className="px-6 py-24 text-center relative overflow-hidden">
+        <section id="waitlist" className="px-6 py-24 text-center relative overflow-hidden scroll-mt-24">
           {/* Glow backdrop */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
@@ -362,26 +406,7 @@ export default function AiRadar() {
               AI Radar is launching soon. Get early access and help shape the future of
               content verification.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <button
-                className="px-10 py-4 rounded-full font-bold text-black text-lg transition-all duration-200 hover:scale-105"
-                style={{
-                  background: '#22d3ee',
-                  boxShadow: '0 0 36px rgba(34,211,238,0.45)',
-                }}
-              >
-                Join Waitlist
-              </button>
-              <button
-                className="px-10 py-4 rounded-full font-bold text-lg transition-all duration-200 hover:bg-cyan-500/10"
-                style={{
-                  color: '#22d3ee',
-                  border: '1px solid rgba(34,211,238,0.4)',
-                }}
-              >
-                Learn More
-              </button>
-            </div>
+            <WaitlistForm />
           </div>
         </section>
       </div>
